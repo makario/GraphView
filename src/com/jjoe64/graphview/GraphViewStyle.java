@@ -10,18 +10,15 @@ import android.graphics.Color;
 public class GraphViewStyle {
 	private int vLabelsColor;
 	private int hLabelsColor;
-	private int gridColor;
 
 	public GraphViewStyle() {
-		vLabelsColor = Color.WHITE;
+		vLabelsColor = Color.BLACK;
 		hLabelsColor = Color.WHITE;
-		gridColor = Color.DKGRAY;
 	}
 
 	public GraphViewStyle(int vLabelsColor, int hLabelsColor, int gridColor) {
 		this.vLabelsColor = vLabelsColor;
 		this.hLabelsColor = hLabelsColor;
-		this.gridColor = gridColor;
 	}
 
 	public int getVerticalLabelsColor() {
@@ -32,10 +29,6 @@ public class GraphViewStyle {
 		return hLabelsColor;
 	}
 
-	public int getGridColor() {
-		return gridColor;
-	}
-
 	public void setVerticalLabelsColor(int c) {
 		vLabelsColor = c;
 	}
@@ -44,7 +37,4 @@ public class GraphViewStyle {
 		hLabelsColor = c;
 	}
 
-	public void setGridColor(int c) {
-		gridColor = c;
-	}
 }

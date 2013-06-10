@@ -10,15 +10,12 @@ public class GraphViewSeries {
 	 * graph series style: color and thickness
 	 */
 	static public class GraphViewSeriesStyle {
-		public int color = 0xff0077cc;
-		public int thickness = 3;
+		
+		public int color;
+		public int thickness;
 		private ValueDependentColor valueDependentColor;
 
-		public GraphViewSeriesStyle() {
-			super();
-		}
 		public GraphViewSeriesStyle(int color, int thickness) {
-			super();
 			this.color = color;
 			this.thickness = thickness;
 		}
@@ -31,23 +28,21 @@ public class GraphViewSeries {
 	}
 
 	final String description;
-	final GraphViewSeriesStyle style;
+	
+	private GraphViewSeriesStyle style;
 	GraphViewData[] values;
 	private final List<GraphView> graphViews = new ArrayList<GraphView>();
-
+	
 	public GraphViewSeries(GraphViewData[] values) {
 		description = null;
-		style = new GraphViewSeriesStyle();
+		// style = new GraphViewSeriesStyle();
 		this.values = values;
 	}
 
 	public GraphViewSeries(String description, GraphViewSeriesStyle style, GraphViewData[] values) {
 		super();
 		this.description = description;
-		if (style == null) {
-			style = new GraphViewSeriesStyle();
-		}
-		this.style = style;
+		this.setStyle(style);
 		this.values = values;
 	}
 
@@ -88,5 +83,13 @@ public class GraphViewSeries {
 		for (GraphView g : graphViews) {
 			g.redrawAll();
 		}
+	}
+
+	public GraphViewSeriesStyle getStyle() {
+		return style;
+	}
+
+	public void setStyle(GraphViewSeriesStyle style) {
+		this.style = style;
 	}
 }

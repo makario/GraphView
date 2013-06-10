@@ -21,15 +21,14 @@ public class LineGraphView extends GraphView {
 
 	public LineGraphView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
 		paintBackground = new Paint();
 		paintBackground.setARGB(255, 20, 40, 60);
 		paintBackground.setStrokeWidth(4);
 	}
 	
 	public LineGraphView(Context context, String title) {
-		super(context, title);
-
+		super(context);
+		setTitle(title);
 		paintBackground = new Paint();
 		paintBackground.setARGB(255, 20, 40, 60);
 		paintBackground.setStrokeWidth(4);
@@ -40,6 +39,7 @@ public class LineGraphView extends GraphView {
 		// draw background
 		double lastEndY = 0;
 		double lastEndX = 0;
+		
 		if (drawBackground) {
 			float startY = graphheight + border;
 			for (int i = 0; i < values.length; i++) {
