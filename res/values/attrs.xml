@@ -16,7 +16,20 @@
         <attr name="labelTextSize" format="dimension|reference" />
         <attr name="showVerticalLabels" format="boolean" />
         <attr name="showHorizontalLabels" format="boolean" />
-             
+        
+        <attr name="numVerticalLabels" format="integer" />
+        <attr name="numHorizontalLabels" format="integer" />
+    </declare-styleable>
+    
+    <declare-styleable name="LineGraphView">
+        <attr name="drawSeriesPoints" format="boolean" />
+        <attr name="seriesPointStyle">
+            <enum name="circle" value="0" />
+            <enum name="square" value="1" />
+            <enum name="triangle" value="2" />
+        </attr>
+        <attr name="drawSmoothLine" format="boolean" />
+        
     </declare-styleable>
 
 </resources>
