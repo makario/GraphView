@@ -54,7 +54,6 @@ abstract public class GraphView extends LinearLayout {
 
 		public GraphViewContentView(Context context) {
 			super(context);
-			graphColor = context.getResources().getColor(R.color.holo_blue);
 		}
 
 
@@ -140,9 +139,7 @@ abstract public class GraphView extends LinearLayout {
 			double diffY = maxY - minY;
 			paint.setStrokeCap(Paint.Cap.ROUND);
 
-			for (int i=0; i<graphSeries.size(); i++) {
-				drawSeries(canvas, _values(i), graphwidth, graphheight, border, minX, minY, diffX, diffY, horstart, graphSeries.get(i).getStyle());
-			}
+			drawSeries(canvas, border, horstart, minY, minX, diffX, graphheight, graphwidth, diffY);
 
 			if (showLegend) drawLegend(canvas, height, width);
 		}
@@ -298,7 +295,7 @@ abstract public class GraphView extends LinearLayout {
 	private View viewVerLabels;
 	private ScaleGestureDetector scaleDetector;
 	private boolean scalable;
-	private List<GraphViewSeries> graphSeries = new ArrayList<GraphViewSeries>();
+	protected List<GraphViewSeries> graphSeries = new ArrayList<GraphViewSeries>();
 	private boolean showLegend = false;
 	private float legendWidth = 120;
 	private LegendAlign legendAlign = LegendAlign.MIDDLE;
@@ -362,10 +359,6 @@ abstract public class GraphView extends LinearLayout {
 
 		super(context, attrs);
 		initialize(context);
-
-		if (anim == null) {
-			createAnimation();
-		}
 
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.GraphView);
 		for (int i = 0; i < a.getIndexCount(); ++i) {
@@ -447,7 +440,7 @@ abstract public class GraphView extends LinearLayout {
 		this.numHorizLabels = numHorizLabels;
 	}
 
-	private GraphViewData[] _values(int idxSeries) {
+	protected GraphViewData[] _values(int idxSeries) {
 		GraphViewData[] values = graphSeries.get(idxSeries).values;
 		if (viewportStart == 0 && viewportSize == 0) {
 			// all data
@@ -479,7 +472,7 @@ abstract public class GraphView extends LinearLayout {
 
 		// if the user didn't specifically set a style, use defaults
 		if (series.getStyle() == null) {
-			int defaultColor = graphColor != 0 ? graphColor : graphColors[(0 + nextColor++) % graphColors.length];
+			int defaultColor = graphColor != 0 ? graphColor : graphColors[nextColor++ % graphColors.length];
 			series.setStyle(new GraphViewSeriesStyle(defaultColor, 3));
 		}
 
@@ -518,12 +511,14 @@ abstract public class GraphView extends LinearLayout {
 			}
 		}
 	}
-
-	abstract public void drawSeries(Canvas canvas, GraphViewData[] values, float graphwidth, float graphheight, float border, double minX, double minY, double diffX, double diffY, float horstart, GraphViewSeriesStyle style);
-
-	public interface LabelFormatter {
-		public String formatLabel(double value);
+	
+	protected void drawSeries(Canvas canvas, float border, float horstart, double minY, double minX, double diffX, float graphheight, float graphwidth, double diffY) {
+		for (int i = 0; i<graphSeries.size(); i++) {
+			drawDataSeries(canvas, _values(i), graphwidth, graphheight, border, minX, minY, diffX, diffY, horstart, graphSeries.get(i).getStyle());
+		}
 	}
+
+	abstract public void drawDataSeries(Canvas canvas, GraphViewData[] values, float graphwidth, float graphheight, float border, double minX, double minY, double diffX, double diffY, float horstart, GraphViewSeriesStyle style);
 
 	public void setVerticalLabelFormatter(LabelFormatter verticalLabelFormatter) {
 		this.verticalLabelFormatter = verticalLabelFormatter;
@@ -573,8 +568,15 @@ abstract public class GraphView extends LinearLayout {
 		}
 		return labels;
 	}
-
-	private void createAnimation() {
+	
+	public void startAnimation() {
+		if (anim == null) {
+			anim = createAnimation();
+		}
+		anim.start();
+	}
+	
+	protected ValueAnimator createAnimation() {
 		anim = ValueAnimator.ofFloat(0f, 1f);
 		anim.setDuration(1000);
 
@@ -587,7 +589,7 @@ abstract public class GraphView extends LinearLayout {
 		});
 
 		anim.setInterpolator(interpolator);
-		anim.start();
+		return anim;
 	}
 
 	public void setInterpolator(Interpolator interpolator) {
@@ -759,19 +761,22 @@ abstract public class GraphView extends LinearLayout {
 		graphContentView.invalidate();
 	}
 
-	public void removeSeries(GraphViewSeries series)
-	{
+	public void removeSeries(GraphViewSeries series){
 		graphSeries.remove(series);
 	}
 
-	public void removeSeries(int index)
-	{
+	public void removeSeries(int index) {
 		if (index < 0 || index >= graphSeries.size())
 		{
 			throw new IndexOutOfBoundsException("No series at index " + index);
 		}
 
 		graphSeries.remove(index);
+	}
+	
+	public void clearData() {
+		graphSeries.clear();
+		redrawAll();
 	}
 
 	public void scrollToEnd() {
@@ -808,10 +813,10 @@ abstract public class GraphView extends LinearLayout {
 
 	/**
 	 * set manual Y axis limit
-	 * @param max
 	 * @param min
+	 * @param max
 	 */
-	public void setManualYAxisBounds(double max, double min) {
+	public void setManualYAxisBounds(double min, double max) {
 		manualMaxYValue = max;
 		manualMinYValue = min;
 		manualYAxis = true;

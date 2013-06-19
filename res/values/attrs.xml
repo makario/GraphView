@@ -29,7 +29,11 @@
             <enum name="triangle" value="2" />
         </attr>
         <attr name="drawSmoothLine" format="boolean" />
-        
+    </declare-styleable>
+    
+    <declare-styleable name="BarGraphView">
+        <attr name="barWidth" format="dimension|reference" />
+        <attr name="maxBarWidth" format="dimension|reference" />
     </declare-styleable>
 
 </resources>

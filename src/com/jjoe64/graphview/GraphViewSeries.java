@@ -34,15 +34,16 @@ public class GraphViewSeries {
 	private final List<GraphView> graphViews = new ArrayList<GraphView>();
 	
 	public GraphViewSeries(GraphViewData[] values) {
-		description = null;
-		// style = new GraphViewSeriesStyle();
-		this.values = values;
+		this(values, null, null);
+	}
+	
+	public GraphViewSeries(GraphViewData[] values, int color) {
+		this(values, null, new GraphViewSeriesStyle(color, 3));
 	}
 
-	public GraphViewSeries(String description, GraphViewSeriesStyle style, GraphViewData[] values) {
-		super();
+	public GraphViewSeries( GraphViewData[] values, String description, GraphViewSeriesStyle style) {
 		this.description = description;
-		this.setStyle(style);
+		this.style = style;
 		this.values = values;
 	}
 
