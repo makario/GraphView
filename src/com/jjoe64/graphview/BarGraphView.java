@@ -23,6 +23,7 @@ public class BarGraphView extends GraphView {
 
 	private int index;
 	private float[][] yScales;
+	private boolean animateChildrenSeparately;
 
 	public BarGraphView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -85,6 +86,11 @@ public class BarGraphView extends GraphView {
 	@Override
 	protected void onAnimationUpdate(ValueAnimator anim) {
 		scaleY = (Float) anim.getAnimatedValue();
+		if (!animateChildrenSeparately) {
+			for (float[] y : yScales) {
+				Arrays.fill(y, scaleY);
+			}
+		}
 	}
 
 	public void setBarWidth(float barWidth) {
@@ -107,25 +113,37 @@ public class BarGraphView extends GraphView {
 
 	@Override
 	public void startAnimation() {
-		ValueAnimator anim = super.createAnimation();
-		for (int i = 0; i < graphSeries.size(); i++) {
-			for (int j = 0; j < graphSeries.get(i).values.length; j++) {
+		if (animateChildrenSeparately) {
+			ValueAnimator anim = super.createAnimation();
+			for (int i = 0; i < graphSeries.size(); i++) {
+				for (int j = 0; j < graphSeries.get(i).values.length; j++) {
 
-				final int x = i;
-				final int y = j;
+					final int x = i;
+					final int y = j;
 
-				final ValueAnimator a = anim.clone();
-				yScales[x][y] = 0;
-				a.addUpdateListener(new AnimatorUpdateListener() {
-					@Override
-					public void onAnimationUpdate(ValueAnimator arg0) {
-						yScales[x][y] = (Float) a.getAnimatedValue();
-						redrawAll();
-					}
-				});
-				a.setStartDelay(j*100);
-				a.start();
+					final ValueAnimator a = anim.clone();
+					yScales[x][y] = 0;
+					a.addUpdateListener(new AnimatorUpdateListener() {
+						@Override
+						public void onAnimationUpdate(ValueAnimator arg0) {
+							try {
+								yScales[x][y] = (Float) a.getAnimatedValue();
+								redrawAll();
+							} catch (Exception e) {
+
+							}
+						}
+					});
+					a.setStartDelay(j*50);
+					a.start();
+				}
 			}
+		} else {
+			super.startAnimation();
 		}
+	}
+
+	public void setAnimateChildrenSeparately(boolean animateChildrenSeparately) {
+		this.animateChildrenSeparately = animateChildrenSeparately;
 	}
 }

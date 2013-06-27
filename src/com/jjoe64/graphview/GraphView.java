@@ -319,6 +319,7 @@ abstract public class GraphView extends LinearLayout {
 	private int horizLabelTextSize;
 	private int vertLabelTextSize;
 	private ValueAnimator anim;
+	private long animDuration;
 	private Interpolator interpolator = new OvershootInterpolator();
 
 	private boolean showHorizontalLabels = true;
@@ -578,7 +579,7 @@ abstract public class GraphView extends LinearLayout {
 	
 	protected ValueAnimator createAnimation() {
 		anim = ValueAnimator.ofFloat(0f, 1f);
-		anim.setDuration(1000);
+		anim.setDuration(animDuration);
 
 		anim.addUpdateListener(new AnimatorUpdateListener() {
 			@Override
@@ -590,6 +591,10 @@ abstract public class GraphView extends LinearLayout {
 
 		anim.setInterpolator(interpolator);
 		return anim;
+	}
+	
+	public void setAnimationDuration(long duration) {
+		this.animDuration = duration;
 	}
 
 	public void setInterpolator(Interpolator interpolator) {
