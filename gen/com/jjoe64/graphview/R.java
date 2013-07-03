@@ -148,6 +148,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static int holo_purple=0x7f030001;
         public static int holo_red=0x7f030004;
     }
+    public static final class dimen {
+        public static int series_size=0x7f040000;
+    }
     public static final class id {
         public static int bar=0x7f020001;
         public static int circle=0x7f020002;

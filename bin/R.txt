@@ -21,6 +21,7 @@ int color holo_green 0x7f030002
 int color holo_orange 0x7f030003
 int color holo_purple 0x7f030001
 int color holo_red 0x7f030004
+int dimen series_size 0x7f040000
 int id bar 0x7f020001
 int id circle 0x7f020002
 int id line 0x7f020000

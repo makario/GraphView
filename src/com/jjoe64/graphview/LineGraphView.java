@@ -186,7 +186,7 @@ public class LineGraphView extends GraphView {
 		private int radius;
 
 		public CircleSeriesDrawer() {
-			this(10);
+			this(getResources().getDimensionPixelSize(R.dimen.series_size));
 		}
 
 		public CircleSeriesDrawer(int radius) {
@@ -208,7 +208,7 @@ public class LineGraphView extends GraphView {
 		private int size;
 
 		public TriangleSeriesDrawer() {
-			this(10);
+			this(getResources().getDimensionPixelSize(R.dimen.series_size));
 		}
 
 		public TriangleSeriesDrawer(int radius) {
@@ -235,7 +235,7 @@ public class LineGraphView extends GraphView {
 		private int size;
 
 		public SquareSeriesDrawer() {
-			this(20);
+			this(getResources().getDimensionPixelSize(R.dimen.series_size)*2);
 		}
 
 		public SquareSeriesDrawer(int size) {
